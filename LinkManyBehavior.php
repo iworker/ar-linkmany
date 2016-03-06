@@ -222,7 +222,17 @@ class LinkManyBehavior extends Behavior
         return [
             BaseActiveRecord::EVENT_AFTER_INSERT => 'afterSave',
             BaseActiveRecord::EVENT_AFTER_UPDATE => 'afterSave',
+            BaseActiveRecord::EVENT_AFTER_DELETE => 'afterDelete',
         ];
+    }
+
+    /**
+     * Handles owner 'afterDelete' event and unlink all related records
+     * @param \yii\base\Event $event event instance
+     */
+    public function afterDelete($event)
+    {
+        $this->owner->unlinkAll($this->relation, $this->deleteOnUnlink);
     }
 
     /**
